@@ -6,9 +6,10 @@
 
 - 多线程并发扫描，速度快
 - 自定义字典文件
+- 扩展名探测（-x 参数，支持 php,asp,txt 等）
 - 状态码过滤（默认保留 200/301/302/403）
 - 目标可达性预检，避免静默失败
-- 结果保存到文件
+- 结果保存到文件（自定义输出路径 -o）
 
 ## 环境要求
 
@@ -32,6 +33,8 @@ python dirscan.py -u http://目标地址 -w 字典文件路径 -t 线程数
 | `--url` | `-u` | 目标 URL（必填），如 `http://example.com` | 无 |
 | `--wordlist` | `-w` | 字典文件路径 | `common.txt` |
 | `--threads` | `-t` | 并发线程数 | `10` |
+| `--extensions` | `-x` | 扫描文件扩展名，用逗号分隔，如 `php,asp,txt` | 无 |
+| `--output` | `-o` | 结果保存路径 | `results.txt` |
 
 ### 示例
 
@@ -39,13 +42,15 @@ python dirscan.py -u http://目标地址 -w 字典文件路径 -t 线程数
 # 使用默认字典，10线程扫描
 python dirscan.py -u http://192.168.123.138 -w common.txt -t 10
 
-# 快速扫描，5线程
-python dirscan.py -u http://example.com -w common.txt -t 5
-```
+# 扫描php和html扩展名，5线程
+python dirscan.py -u http://192.168.123.138 -w common.txt -x php,html -t 5
+
+# 指定输出文件路径
+python dirscan.py -u http://192.168.123.138 -w common.txt -x php -o output.txt
 
 ## 输出
 
-扫描结果会即时打印到终端，同时自动保存到 `results.txt` 文件中。
+扫描结果会即时打印到终端，同时自动保存到文件中（默认 `results.txt`，可通过 `-o` 指定路径）。
 
 ```
 存在的目录：http://192.168.123.138/admin  状态码：403
