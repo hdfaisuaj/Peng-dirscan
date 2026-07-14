@@ -30,7 +30,7 @@ python dirscan.py -u http://目标地址 -w 字典文件路径 -t 线程数
 | 参数 | 简写 | 说明 | 默认值 |
 |------|------|------|--------|
 | `--url` | `-u` | 目标 URL（必填），如 `http://example.com` | 无 |
-| `--wordlist` | `-w` | 字典文件路径 | `wordlists.txt` |
+| `--wordlist` | `-w` | 字典文件路径 | `common.txt` |
 | `--threads` | `-t` | 并发线程数 | `10` |
 
 ### 示例
