@@ -12,6 +12,7 @@ parser.add_argument("-o","--output",default="results.txt",help="输出结果文�
 args = parser.parse_args()
 target = args.url.rstrip("/")
 ext_list = []
+session = requests.Session()
 if args.extensions:
     ext_list = [f".{e.strip()}" for e in args.extensions.split(",")]
 Y_code = [200,301,302,403]
@@ -19,7 +20,7 @@ def scan_one(path):
     ##读取url，利用字典进行拼接url
     url = target + "/" + path
     try:
-        response = requests.get(url,timeout=3)
+        response = session.get(url,timeout=3)
         if response.status_code in Y_code:
             ##发送请求，进行访问，识别返回状态码
             print(f"存在的目录：{url}  状态码：{response.status_code}")
@@ -32,7 +33,7 @@ def scan_one(path):
 ##检查网址是否可达
 def check_url(url):
     try:
-        response = requests.get(url,timeout=3)
+        response = session.get(url,timeout=3)
         print(f"目标网址可达，状态码：{response.status_code}")
     except requests.exceptions.ConnectionError:
         print("目标网址无法访问，请检查网络连接或网址是否正确。")
