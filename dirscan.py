@@ -7,8 +7,13 @@ parser = argparse.ArgumentParser(description="Web目录爆破工具")
 parser.add_argument("-u","--url",help="目标URL，如：http://example.com")
 parser.add_argument("-w","--wordlist",default="common.txt",help="字典路径：如：wordlists.txt")
 parser.add_argument("-t","--threads",type=int,default=10,help="线程数，默认10")
+parser.add_argument("-x","--extensions",help="文件扩展名，如：.php,.html")
+parser.add_argument("-o","--output",default="results.txt",help="输出结果文件路径，默认results.txt")
 args = parser.parse_args()
 target = args.url.rstrip("/")
+ext_list = []
+if args.extensions:
+    ext_list = [f".{e.strip()}" for e in args.extensions.split(",")]
 Y_code = [200,301,302,403]
 def scan_one(path):
     ##读取url，利用字典进行拼接url
@@ -40,12 +45,17 @@ check_url(target)
 results = []
 with open(args.wordlist, encoding="utf-8") as f:
     paths = [line.strip() for line in f if line.strip()]
+    all_paths = list(paths)
+    for ext in ext_list:
+        for p in paths:
+            all_paths.append(p + ext)
 with ThreadPoolExecutor(max_workers=args.threads) as ex:
-    for res in ex.map(scan_one, paths):
+    for res in ex.map(scan_one, all_paths):
         if res:
             results.append(res)
-with open("results.txt","w", encoding="utf-8") as f:
+results.sort(key=lambda x: x[0]) # 按照URL进行排序
+with open(args.output,"w", encoding="utf-8") as f:
     for url,code in results:
         line = f"{url}  状态码：{code}\n"
         f.write(line)
-    print(f"结果已保存到results.txt文件中。")
+    print(f"结果已保存到{args.output}文件中。")

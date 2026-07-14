@@ -1,0 +1,10 @@
+admin
+login
+phpmyadmin
+uploads
+backup
+api
+manager
+install
+config
+images
